@@ -4,10 +4,12 @@ class RandomTTT
 
   def initialize
     @players = [ "X", "O" ]
-    @board = TTTBoard.theBoard
-    @current_player = @players[rand(0..1)]
+    @board = Board.theBoard
+    @board.add_players(@players)
+    @curr_player = @players[rand(0..1)]
     @turn = 0
     @waittime = 1
+    @open_space = ->(space) { space.nil? }
   end
 
   def play
@@ -18,11 +20,11 @@ class RandomTTT
   end
 
   def outcome
-    if wins_on_board?(@current_player)
-      @current_player
-    elsif wins_on_board?(other_player @current_player)
-      other_player @current_player
-    elsif @board.pos_moves.length == 0
+    if wins_on_board?(@curr_player)
+      @curr_player
+    elsif wins_on_board?(other_player @curr_player)
+      other_player @curr_player
+    elsif @board.pos_moves(@open_space).length == 0
       "TIE"
     else
       nil
@@ -30,8 +32,8 @@ class RandomTTT
   end
 
   def step
-    @current_player = other_player @current_player
-    @board.make_move(@current_player, random_move)
+    @curr_player = other_player @curr_player
+    @board.make_move(@curr_player, random_move)
     @turn += 1
     visualize
     sleep(@waittime)
@@ -48,15 +50,15 @@ class RandomTTT
   end
 
   def random_move
-    pos_moves = @board.pos_moves
-    pos_moves[rand(0..pos_moves.length-1)]
+    moves = @board.pos_moves(@open_space)
+    moves[rand(0..moves.length-1)]
   end
 
   private
 
   def visualize
     puts "\nTURN: " + @turn.to_s
-    puts "It's player " + @current_player + "'s turn"
+    puts "It's player " + @curr_player + "'s turn"
     @board.visualize
   end
 
@@ -65,7 +67,7 @@ class RandomTTT
   end
 
   def wins_on_board?(p)
-    pwins = proc { |player| player ? player == p : false }
+    pwins = Proc.new { |player| player ? player == p : false }
     @board.for_any_row_col_diag? { |group| group.all? pwins }
   end
 

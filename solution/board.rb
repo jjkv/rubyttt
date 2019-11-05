@@ -1,17 +1,16 @@
-class TTTBoard
+class Board
 
-  def initialize(players = [ "X", "O" ])
-    @players = players
+  def initialize
+    @players = Array.new
     @size = 3
     @board = Array.new(@size) { Array.new(@size) { nil } }
     @row_coord = { "T" => 0, "M" => 1, "B" => 2 }
     @col_coord = { "L" => 0, "C" => 1, "R" => 2 }
     @row_space = @row_coord.keys
     @col_space = @col_coord.keys
-    @players = players
   end
 
-  @@theBoard = TTTBoard.new
+  @@theBoard = Board.new
 
   private_class_method :new
 
@@ -19,16 +18,20 @@ class TTTBoard
     return @@theBoard
   end
 
-  def pos_moves
-    empty = Array.new
+  def add_players(players)
+    @players = players
+  end
+
+  def pos_moves(valid_space)
+    possible = Array.new
     @board.each_with_index do |row, i|
       row.each_with_index do |space, j|
-        if space.nil?
-          empty << space_from_coords(i, j)
+        if (valid_space.call(@board[i][j]))
+          possible << space_from_coords(i, j)
         end
       end
     end
-    empty
+    possible
   end
 
   def make_move(player, space)
