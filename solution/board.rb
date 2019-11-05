@@ -90,7 +90,7 @@ class TTTBoard
   end
 
   def coords_from_space(space)
-    if space.length < 3 
+    if space.length == 2
       return @row_coord[space[0]], @col_coord[space[1]]
     end
   end
