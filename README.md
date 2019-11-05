@@ -1,1 +1,2 @@
-# Ruby Recitation: Tic Tac Toe Simulation
+to begin, navigate to `/simulation` and consult the `README.md`
+
