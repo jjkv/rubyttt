@@ -3,7 +3,7 @@ require_relative 'board'
 class RandomTTT
 
   def initialize
-    @players = [ "X", "O" ]
+    @players = [ :X, :O ]
     @board = Board.theBoard
     @board.add_players(@players)
     @curr_player = @players[rand(0..1)]
@@ -12,6 +12,7 @@ class RandomTTT
     @open_space = ->(space) { space.nil? }
   end
 
+  # run the game to completion
   def play
     until done = outcome
       step
@@ -19,24 +20,37 @@ class RandomTTT
     stop(done)
   end
 
+  # determines the outcome of the game according to the following:
+  #  - if a player wins, return that player as a symbol (either :X or :O)
+  #  - if the game is a draw, return the symbol :TIE
+  #  - otherwise, the game is not over, return nil
   def outcome
     # YOUR CODE GOES HERE
   end
 
+  # takes a single step of the simulation:
+  #  1. set the current player to the other player
+  #  2. have the new current player make a random move
+  #  3. increment the turn instance variable
+  #  4. print the state of the game
+  #  5. sleep for some amount of time
   def step
     # YOUR CODE GOES HERE
   end
 
+  # takes the result of the game (tie, or win) and reports the outcome
   def stop(result)
-    puts "GAME ENDS AFTER " + @turn.to_s + " TURNS!"
+    puts "GAME ENDS AFTER #{@turn} TURNS!"
     case result
-    when "TIE"
+    when :TIE
       puts "TIE GAME!"
     else
-      puts "WINNER: " + result
+      puts "WINNER: #{result}"
     end
   end
 
+  # returns a single move as a space ("TR", "BL", etc.)
+  # moves returned this way are legal moves for the board
   def random_move
     moves = @board.pos_moves(@open_space)
     moves[rand(0..moves.length-1)]
@@ -45,8 +59,8 @@ class RandomTTT
   private
 
   def visualize
-    puts "\nTURN: " + @turn.to_s
-    puts "It's player " + @curr_player + "'s turn"
+    puts "\nTURN: #{@turn}"
+    puts "It's player #{@curr_player}'s turn"
     @board.visualize
   end
 
@@ -54,9 +68,11 @@ class RandomTTT
     @players[~@players.index(p)]
   end
 
+  # takes a player p and answers whether or not p has won the game
+  # use the for_any_row_col_diag? method of the board to write
+  # this method
   def wins_on_board?(p)
-    pwins = Proc.new { |player| player ? player == p : false }
-    @board.for_any_row_col_diag? { |group| group.all? pwins }
+    # YOUR CODE GOES HERE
   end
 
 end
