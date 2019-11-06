@@ -16,7 +16,7 @@ class Board
     possible = Array.new
     @board.each_with_index do |row, i|
       row.each_with_index do |square, j|
-        if squarepred.call square
+        if squarepred.call(square)
           possible << space_from_coords(i, j)
         end
       end
@@ -33,7 +33,7 @@ class Board
   end
 
   def for_any_row_col_diag?(linepred)
-     diag_res = linepred.call(nw_se) || linepred.call(sw_ne) # this will not work with or
+     diag_res = linepred.call(nw_se) || linepred.call(sw_ne)
      (0..@size-1).reduce(diag_res) { |res, i| res || linepred.call(row(i)) || linepred.call(col(i)) }
   end
 

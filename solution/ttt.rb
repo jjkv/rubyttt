@@ -13,10 +13,10 @@ class RandomTTT
   end
 
   def play
-    until done = outcome
+    until gameover = outcome
       step
     end
-    stop done
+    report gameover
   end
 
   def outcome
@@ -39,11 +39,13 @@ class RandomTTT
     sleep @waittime
   end
 
-  def stop(result)
+  def report(result)
     puts "GAME ENDS AFTER #{@turn} TURNS!"
     case result
     when :TIE
       puts "TIE GAME!"
+    when nil
+      raise StandardError.new "Impossible State"
     else
       puts "WINNER: #{result}"
     end
