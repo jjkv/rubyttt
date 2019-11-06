@@ -124,7 +124,7 @@ The `Board` class implements the following instance methods as its public protoc
  - `for_any_row_col_diag?` takes a lambda `linepred`, which takes a line (a row,
    column, or diagonal on the board, represented as an array of squares) and
    returns true or false. `for_any_row_col_diag?` answers true if `linepred` 
-   return true on *any* line on the board, false otherwise (this is explained further
+   returns true on *any* line on the board, false otherwise (this is explained further
    in board.rb).
 
  - `visualize`: prints the state of the board to stdout.
