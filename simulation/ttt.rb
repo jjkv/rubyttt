@@ -25,15 +25,7 @@ class RandomTTT
   #  - if the game is a draw, return the symbol :TIE
   #  - otherwise, the game is not over, return nil
   def outcome
-    if wins_on_board? @curr_player
-      @curr_player
-    elsif wins_on_board?(other_player @curr_player)
-      other_player @curr_player
-    elsif @board.pos_moves(@open_square).length == 0
-      :TIE
-    else
-      nil
-    end
+    # YOUR CODE GOES HERE
   end
 
   # takes a single step of the simulation:
@@ -43,11 +35,7 @@ class RandomTTT
   #  4. print the state of the game
   #  5. sleep for some amount of time
   def step
-    @curr_player = other_player @curr_player
-    @board.make_move(@curr_player, random_move)
-    @turn += 1
-    visualize
-    sleep @waittime
+    # YOUR CODE GOES HERE
   end
 
   # takes the result of the game (tie, or win) and reports the outcome
@@ -85,9 +73,7 @@ class RandomTTT
   # use the for_any_row_col_diag? method of the board to write
   # this method
   def wins_on_board?(p)
-    p_on_square = lambda { |player| player ? player == p : false }
-    p_wins_line = lambda { |line| line.all? p_on_square }
-    @board.for_any_row_col_diag? p_wins_line
+    # YOUR CODE GOES HERE
   end
 
 end

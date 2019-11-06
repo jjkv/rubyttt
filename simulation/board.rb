@@ -25,33 +25,20 @@ class Board
   # representing all the positions i, j on the board for which 
   # squarepred(@board[i][j]) evaluates to true
   def pos_moves(squarepred)
-    possible = Array.new
-    @board.each_with_index do |row, i|
-      row.each_with_index do |square, j|
-        if squarepred.call(square)
-          possible << space_from_coords(i, j)
-        end
-      end
-    end
-    possible
+    # YOUR CODE GOES HERE
   end
 
   # given a player and a space string ("TR", "BL", etc.), place the player 
   # on that space. if the player cannot move to the provided space, raise
   # exception "IllegalMove"
   def make_move(player, space)
-    if @players.include? player and empty? space
-      place(player, space)      
-    else
-      raise StandardError.new "IllegalMove"
-    end
+    # YOUR CODE GOES HERE
   end
 
   # given a lambda linepred : square array -> bool, returns true if the 
   # lambda returns true for any line l, where l is an array of squares on the board
   def for_any_row_col_diag?(linepred)
-     diag_res = linepred.call(nw_se) || linepred.call(sw_ne)
-     (0..@size-1).reduce(diag_res) { |res, i| res || linepred.call(row(i)) || linepred.call(col(i)) }
+    # YOUR CODE GOES HERE
   end
 
   # prints a string representation of the board
