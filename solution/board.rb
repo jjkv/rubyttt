@@ -1,7 +1,7 @@
 class Board
 
   def initialize
-    @players = Array.new
+    @players = nil
     @size = 3
     @board = Array.new(@size) { Array.new(@size) { nil } }
     @row_coord = { "T" => 0, "M" => 1, "B" => 2 }
@@ -16,7 +16,7 @@ class Board
     possible = Array.new
     @board.each_with_index do |row, i|
       row.each_with_index do |square, j|
-        if squarepred.call(square)
+        if (squarepred.call square)
           possible << space_from_coords(i, j)
         end
       end
@@ -26,7 +26,7 @@ class Board
 
   def make_move(player, space)
     if @players.include? player and empty? space
-      place(player, space)      
+      place(player, space)
     else
       raise StandardError.new "IllegalMove"
     end
@@ -68,8 +68,8 @@ class Board
   end
 
   def space_from_coords(i, j)
-    r = i >= 0 && i < 3 ? @row_space[i] : ""
-    c = j >= 0 && j < 3 ? @col_space[j] : ""
+    r = i >= 0 && i < @size ? @row_space[i] : ""
+    c = j >= 0 && j < @size ? @col_space[j] : ""
     r+c
   end
 
