@@ -14,7 +14,7 @@ class Board
 
   private_class_method :new
 
-  def self.theBoard return @@theBoard end
+  def self.theBoard; return @@theBoard end
 
   def add_players(players) @players = players end
 
