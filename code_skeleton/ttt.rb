@@ -36,7 +36,7 @@ class RandomTTT
   # evaluates to true, then we call report on that value
   def play
 
-    if @finished return end
+    if @finished; return end
 
     until gameover = outcome
       step
