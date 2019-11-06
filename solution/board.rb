@@ -14,13 +14,9 @@ class Board
 
   private_class_method :new
 
-  def self.theBoard
-    return @@theBoard
-  end
+  def self.theBoard return @@theBoard end
 
-  def add_players(players)
-    @players = players
-  end
+  def add_players(players) @players = players end
 
   def pos_moves(valid_space)
     possible = Array.new
@@ -35,7 +31,7 @@ class Board
   end
 
   def make_move(player, space)
-    if @players.include? player and legal_move? space
+    if @players.include? player and empty? space
       place(player, space)      
     else
       raise StandardError.new "IllegalMove"
@@ -51,32 +47,23 @@ class Board
     delim = "-------------\n"
     s = delim
     @board.each do |row|
-      s = row.reduce(s + "|") { |s, space| s + (space.nil? ? "   |": " " + space + " |") }
-      s += "\n" + delim
+      s = row.reduce(s + "|") { |s, space| "#{s} #{space.nil? ? " " : space} |" }
+      s = "#{s}\n#{delim}"
     end
     puts s
-  end
-  
+  end  
 
   private
 
-  def row(i)
-    @board[i]
-  end
+  def row(i) @board[i] end
 
-  def col(j)
-    @board.reduce(Array.new) { |col, row| col << row[j] }
-  end
+  def col(j) @board.reduce(Array.new) { |col, row| col << row[j] } end
 
-  def nw_se
-    (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[i][i] }
-  end
+  def nw_se; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[i][i] } end
 
-  def sw_ne
-    (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[@size-1-i][i] }
-  end
+  def sw_ne; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[@size-1-i][i] } end
   
-  def legal_move?(space)
+  def empty?(space)
     ij = coords_from_space(space)
     @board[ij[0]][ij[1]].nil?
   end
@@ -99,4 +86,3 @@ class Board
   end
 
 end
-
