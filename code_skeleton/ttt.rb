@@ -17,22 +17,37 @@ class RandomTTT
     @curr_player = @players[rand(0..1)]
     @turn = 0
     @waittime = 1
+    @finished = false
     @open_square = lambda { |square| square.nil? }
   end
+
+  # ruby instance variables are private by default, but we can use attr_reader
+  # to expose the value of these variables. this line makes the VALUE of 
+  # @finished public, such that for a RandomTTT instance t, t.finished will
+  # return answer with the value of @finished
+  attr_reader :finished
 
   # runs the game to completion, this method is invoked at the bottom of the file
   # the "until loop" invokes the step instance method until the condition is true.
   # our condition (gameover = outcome) is an assignment expression, where the
   # value of the assignment is the value of the local variable gameover after it
-  # has been assigned the value returned by calling the instance method outcome.
+  # has been assigned the value returned by calling the private instance method outcome.
   # basically, we call the step method until outcome returns something that 
   # evaluates to true, then we call report on that value
   def play
+
+    if @finished return end
+
     until gameover = outcome
       step
     end
-    report gameover
+
+    report gameover    
+    @finished = true
   end
+
+  # all methods defined below the word private are private
+  private
 
   # BEFORE IMPLEMENTING outcome, YOU MUST FIRST IMPLEMENT wins_on_board? !!!
   #
@@ -48,6 +63,7 @@ class RandomTTT
   #  - pos_moves (a public instance method of Board, you must write this in board.rb)
   def outcome
     # YOUR CODE GOES HERE
+    raise StandardError.new "Implement me!"
   end
 
   # takes a single step of the simulation by performing the following actions:
@@ -64,6 +80,7 @@ class RandomTTT
   #  - sleep (takes an integer n and sleeps for n seconds)
   def step
     # YOUR CODE GOES HERE
+    raise StandardError.new "Implement me!"
   end
 
   # takes the result of the game (tie, or win) and reports the outcome
@@ -89,15 +106,12 @@ class RandomTTT
     moves[rand(0..moves.length-1)]
   end
 
-  private
-
   # calls the visualize method of the board class on @board
   def visualize
     puts "\nTURN: #{@turn}"
     puts "It's player #{@curr_player}'s turn"
     @board.visualize
   end
-
 
   # if p is :X, return :O, else if p is :O, return :X
   # ~ is bitwise negation
@@ -111,6 +125,7 @@ class RandomTTT
   # class's initialize method for an example of how to create lambdas
   def wins_on_board?(p)
     # YOUR CODE GOES HERE
+    raise StandardError.new "Implement me!"
   end
 
 end
