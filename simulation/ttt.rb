@@ -4,20 +4,20 @@ class RandomTTT
 
   def initialize
     @players = [ :X, :O ]
-    @board = Board.theBoard
-    @board.add_players(@players)
+    @board = Board.new
+    @board.add_players @players
     @curr_player = @players[rand(0..1)]
     @turn = 0
     @waittime = 1
-    @open_space = ->(space) { space.nil? }
+    @open_square = lambda { |square| square.nil? }
   end
 
-  # run the game to completion
+  # runs the game to completion, this method is invoked at the bottom of the file
   def play
-    until done = outcome
+    until gameover = outcome
       step
     end
-    stop(done)
+    report gameover
   end
 
   # determines the outcome of the game according to the following:
@@ -25,7 +25,15 @@ class RandomTTT
   #  - if the game is a draw, return the symbol :TIE
   #  - otherwise, the game is not over, return nil
   def outcome
-    # YOUR CODE GOES HERE
+    if wins_on_board? @curr_player
+      @curr_player
+    elsif wins_on_board?(other_player @curr_player)
+      other_player @curr_player
+    elsif @board.pos_moves(@open_square).length == 0
+      :TIE
+    else
+      nil
+    end
   end
 
   # takes a single step of the simulation:
@@ -35,15 +43,22 @@ class RandomTTT
   #  4. print the state of the game
   #  5. sleep for some amount of time
   def step
-    # YOUR CODE GOES HERE
+    @curr_player = other_player @curr_player
+    @board.make_move(@curr_player, random_move)
+    @turn += 1
+    visualize
+    sleep @waittime
   end
 
   # takes the result of the game (tie, or win) and reports the outcome
-  def stop(result)
+  # raises an exception if result is nil 
+  def report(result)
     puts "GAME ENDS AFTER #{@turn} TURNS!"
     case result
     when :TIE
       puts "TIE GAME!"
+    when nil
+      raise StandardError.new "Impossible State"
     else
       puts "WINNER: #{result}"
     end
@@ -52,7 +67,7 @@ class RandomTTT
   # returns a single move as a space ("TR", "BL", etc.)
   # moves returned this way are legal moves for the board
   def random_move
-    moves = @board.pos_moves(@open_space)
+    moves = @board.pos_moves(@open_square)
     moves[rand(0..moves.length-1)]
   end
 
@@ -64,15 +79,15 @@ class RandomTTT
     @board.visualize
   end
 
-  def other_player(p)
-    @players[~@players.index(p)]
-  end
+  def other_player(p) @players[~@players.index(p)] end
 
   # takes a player p and answers whether or not p has won the game
   # use the for_any_row_col_diag? method of the board to write
   # this method
   def wins_on_board?(p)
-    # YOUR CODE GOES HERE
+    p_on_square = lambda { |player| player ? player == p : false }
+    p_wins_line = lambda { |line| line.all? p_on_square }
+    @board.for_any_row_col_diag? p_wins_line
   end
 
 end

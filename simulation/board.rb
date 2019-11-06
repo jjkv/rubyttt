@@ -18,41 +18,40 @@ class Board
     @col_space = @col_coord.keys
   end
 
-  # public class variable holding a Board instance
-  @@theBoard = Board.new
+  # takes an array of players, where each player is a symbol
+  def add_players(players) @players = players end
 
-  # hide Board object constructor to implement the singleton pattern
-  # result: only 1 board object exists, and it is accessed by Board.theBoard
-  private_class_method :new
-
-  def self.theBoard
-    return @@theBoard
-  end
-
-  # takes an array of players
-  def add_players(players)
-    @players = players
-  end
-
-  # given a lambda valid_space : square -> bool, answer an array of spaces 
+  # given a lambda squarepred : square -> bool, answer an array of spaces 
   # representing all the positions i, j on the board for which 
-  # valid_space(@board[i][j])  evaluates to true
-  def pos_moves(valid_space)
-    # YOUR CODE GOES HERE
+  # squarepred(@board[i][j]) evaluates to true
+  def pos_moves(squarepred)
+    possible = Array.new
+    @board.each_with_index do |row, i|
+      row.each_with_index do |square, j|
+        if squarepred.call(square)
+          possible << space_from_coords(i, j)
+        end
+      end
+    end
+    possible
   end
 
   # given a player and a space string ("TR", "BL", etc.), place the player 
   # on that space. if the player cannot move to the provided space, raise
   # exception "IllegalMove"
   def make_move(player, space)
-    # YOUR CODE GOES HERE
+    if @players.include? player and empty? space
+      place(player, space)      
+    else
+      raise StandardError.new "IllegalMove"
+    end
   end
 
-  # given a proc : square array -> bool, returns true if proc(a) returns 
-  # true for any array a, where a is an array of spaces on the board 
-  # that may represent any row, col, or diagonal
-  def for_any_row_col_diag?(&proc)
-    # YOUR CODE GOES HERE
+  # given a lambda linepred : square array -> bool, returns true if the 
+  # lambda returns true for any line l, where l is an array of squares on the board
+  def for_any_row_col_diag?(linepred)
+     diag_res = linepred.call(nw_se) || linepred.call(sw_ne)
+     (0..@size-1).reduce(diag_res) { |res, i| res || linepred.call(row(i)) || linepred.call(col(i)) }
   end
 
   # prints a string representation of the board
@@ -60,34 +59,27 @@ class Board
     delim = "-------------\n"
     s = delim
     @board.each do |row|
-      s = row.reduce(s + "|") { |s, space| s + (space.nil? ? "   |": " " + space + " |") }
-      s += "\n" + delim
+      s = row.reduce(s + "|") { |s, space| "#{s} #{space.nil? ? " " : space} |" }
+      s = "#{s}\n#{delim}"
     end
     puts s
-  end
+  end  
 
+  # all instance methods following the keyword private are private
   private
 
   # the following 4 functions may be used to answer the ith row, col, or 
   # the two diagonals (northwest to southeast and southwest to northeast)
 
-  def row(i)
-    @board[i]
-  end
+  def row(i) @board[i] end
 
-  def col(j)
-    @board.reduce(Array.new) { |col, row| col << row[j] }
-  end
+  def col(j) @board.reduce(Array.new) { |col, row| col << row[j] } end
 
-  def nw_se
-    (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[i][i] }
-  end
+  def nw_se; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[i][i] } end
 
-  def sw_ne
-    (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[@size-1-i][i] }
-  end
-  
-  # two methods empty? and place used for interacting with the board directly
+  def sw_ne; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[@size-1-i][i] } end
+
+  # two methods empty? and place used for interacting with the board directly  
 
   def empty?(space)
     ij = coords_from_space(space)
@@ -98,7 +90,6 @@ class Board
     ij = coords_from_space(space)
     @board[ij[0]][ij[1]] = player
   end
-
 
   # finally, two methods for converting between spaces and coordinates
 
@@ -115,4 +106,3 @@ class Board
   end
 
 end
-
