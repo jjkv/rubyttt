@@ -33,8 +33,8 @@ class Board
   end
 
   def for_any_row_col_diag?(linepred)
-     diag_res = linepred.call(nw_se) or linepred.call(sw_ne)
-     (0..@size-1).reduce(diag_res) { |res, i| res or linepred.call(row(i)) or linepred.call(col(i)) }
+     diag_res = linepred.call(nw_se) || linepred.call(sw_ne) # this will not work with or
+     (0..@size-1).reduce(diag_res) { |res, i| res || linepred.call(row(i)) || linepred.call(col(i)) }
   end
 
   def visualize

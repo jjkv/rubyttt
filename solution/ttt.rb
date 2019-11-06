@@ -65,9 +65,9 @@ class RandomTTT
   def other_player(p) @players[~@players.index(p)] end
 
   def wins_on_board?(p)
-    is_p      = lambda { |player| player ? player == p : false }
-    p_wins_on = lambda { |line| line.all? is_p }
-    @board.for_any_row_col_diag? p_wins_on
+    p_on_square = lambda { |player| player ? player == p : false }
+    p_wins_line = lambda { |line| line.all? p_on_square }
+    @board.for_any_row_col_diag? p_wins_line
   end
 
 end
