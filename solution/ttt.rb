@@ -9,15 +9,25 @@ class RandomTTT
     @curr_player = @players[rand(0..1)]
     @turn = 0
     @waittime = 1
+    @finished = false
     @open_square = lambda { |square| square.nil? }
   end
 
+  attr_reader :finished
+
   def play
+
+    if @finished; return nil end
+
     until gameover = outcome
       step
     end
+
     report gameover
+    @finished = true
   end
+
+  private 
 
   def outcome
     if wins_on_board? @curr_player
@@ -55,8 +65,6 @@ class RandomTTT
     moves = @board.pos_moves(@open_square)
     moves[rand(0..moves.length-1)]
   end
-
-  private
 
   def visualize
     puts "\nTURN: #{@turn}"
