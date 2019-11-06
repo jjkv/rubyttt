@@ -87,6 +87,8 @@ GAME ENDS AFTER 7 TURNS!
 WINNER: X
 ```
 
+------------------------------------------------------------------------------
+
 Many methods of these classes have already been defined for you, but some
 have not. Your task is to complete the definitions of both classes in order to 
 produce a working Tic Tac Toe simulator. You will do this by implementing the 
