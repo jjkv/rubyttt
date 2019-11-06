@@ -47,6 +47,10 @@ class Board
     puts s
   end  
 
+  def test
+    raise StandardError.new "Write tests here"
+  end
+
   private
 
   def row(i) @board[i] end
@@ -79,4 +83,8 @@ class Board
     end
   end
 
+end
+
+if __FILE__ == $0
+  Board.new.test
 end

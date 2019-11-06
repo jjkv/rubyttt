@@ -97,6 +97,12 @@ class Board
     puts s
   end  
 
+  # a public instance method for testing your board class. 
+  # on the command line, typing `ruby board.rb` will invoke this method
+  def test
+    raise StandardError.new "Write tests here"
+  end
+
   # all instance methods following the keyword private are private
   private
 
@@ -137,4 +143,8 @@ class Board
     end
   end
 
+end
+
+if __FILE__ == $0
+  Board.new.test
 end
