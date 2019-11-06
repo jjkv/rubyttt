@@ -10,19 +10,13 @@ class Board
     @col_space = @col_coord.keys
   end
 
-  @@theBoard = Board.new
-
-  private_class_method :new
-
-  def self.theBoard; return @@theBoard end
-
   def add_players(players) @players = players end
 
-  def pos_moves(valid_space)
+  def pos_moves(squarepred)
     possible = Array.new
     @board.each_with_index do |row, i|
-      row.each_with_index do |space, j|
-        if (valid_space.call(@board[i][j]))
+      row.each_with_index do |square, j|
+        if squarepred.call square
           possible << space_from_coords(i, j)
         end
       end
@@ -38,9 +32,9 @@ class Board
     end
   end
 
-  def for_any_row_col_diag?(&proc)
-     diag_res = proc.call(nw_se) || proc.call(sw_ne) || false
-     (0..@size-1).reduce(diag_res) { |res, i| res || proc.call(row(i)) || proc.call(col(i)) }
+  def for_any_row_col_diag?(linepred)
+     diag_res = linepred.call(nw_se) or linepred.call(sw_ne)
+     (0..@size-1).reduce(diag_res) { |res, i| res or linepred.call(row(i)) or linepred.call(col(i)) }
   end
 
   def visualize

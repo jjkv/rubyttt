@@ -2,15 +2,14 @@ require_relative 'board'
 
 class RandomTTT
 
-  # sets the value of (default) private instance variables
   def initialize
-    @players = [ :X, :O ] # an array of symbols
-    @board = Board.theBoard # singleton object
+    @players = [ :X, :O ]
+    @board = Board.new
     @board.add_players @players
     @curr_player = @players[rand(0..1)]
     @turn = 0
     @waittime = 1
-    @open_space = ->(space) { space.nil? }
+    @open_square = lambda { |square| square.nil? }
   end
 
   def play
@@ -25,7 +24,7 @@ class RandomTTT
       @curr_player
     elsif wins_on_board?(other_player @curr_player)
       other_player @curr_player
-    elsif @board.pos_moves(@open_space).length == 0
+    elsif @board.pos_moves(@open_square).length == 0
       :TIE
     else
       nil
@@ -49,9 +48,9 @@ class RandomTTT
       puts "WINNER: #{result}"
     end
   end
-
+  
   def random_move
-    moves = @board.pos_moves(@open_space)
+    moves = @board.pos_moves(@open_square)
     moves[rand(0..moves.length-1)]
   end
 
@@ -66,8 +65,9 @@ class RandomTTT
   def other_player(p) @players[~@players.index(p)] end
 
   def wins_on_board?(p)
-    pwins = Proc.new { |player| player ? player == p : false }
-    @board.for_any_row_col_diag? { |group| group.all? pwins }
+    is_p      = lambda { |player| player ? player == p : false }
+    p_wins_on = lambda { |line| line.all? is_p }
+    @board.for_any_row_col_diag? p_wins_on
   end
 
 end
