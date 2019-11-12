@@ -55,11 +55,11 @@ class Board
 
   def row(i) @board[i] end
 
-  def col(j) @board.reduce(Array.new) { |col, row| col << row[j] } end
+  def col(j) @board.map { |row| row[j] } end
 
-  def nw_se; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[i][i] } end
+  def nw_se; (0..@size-1).map { |i| @board[i][i] } end
 
-  def sw_ne; (0..@size-1).reduce(Array.new) { |diag, i| diag << @board[@size-1-i][i] } end
+  def sw_ne; (0..@size-1).map { |i| @board[@size-1-i][i] } end
   
   def empty?(space)
     ij = coords_from_space(space)
@@ -79,7 +79,7 @@ class Board
 
   def coords_from_space(space)
     if space.length == 2
-      return @row_coord[space[0]], @col_coord[space[1]]
+      return [ @row_coord[space[0]], @col_coord[space[1]] ]
     end
   end
 
